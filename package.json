@@ -1,6 +1,6 @@
 {
   "name": "static-resources-freezer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Static resources freezer. The best use for cache invalidation.",
   "main": "index.js",
   "scripts": {

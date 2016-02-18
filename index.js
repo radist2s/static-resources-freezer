@@ -40,13 +40,17 @@ ResourceFreezer.prototype.stream = function (pipeMainTransform) {
         this.queue(null)
     })
 
+    stream.pipe(this.createStream(this.pipeFreezedFilesCollectorTransform))
+
     stream.pipe(
-        this.createStream(this.pipeFreezedFilesCollectorTransform, function endCallback() {
-            var reslovedFreezeMap = self.resolveFreezeMap(self.freezeMap)
+        this.createStream(function endCallback(stream, sourceFile) {
+            if (!sourceFile.freezerInstance) {
+                return
+            }
 
-            self.freezeMapFile.contents = toJSONBuffer(reslovedFreezeMap)
+            var resolvedFreezeMap = self.resolveFreezeMap(self.freezeMap)
 
-            this.queue(null)
+            self.freezeMapFile.contents = toJSONBuffer(resolvedFreezeMap)
         })
     )
 
@@ -191,7 +195,7 @@ ResourceFreezer.toJSONBuffer = toJSONBuffer
 
 ResourceFreezer.freezeMapResolve = function freezeMapResolve() {
     var freezeMapFile,
-        cssFreezer
+        freezerInstance
 
     return through(
         function write(sourceFile) {
@@ -200,13 +204,13 @@ ResourceFreezer.freezeMapResolve = function freezeMapResolve() {
             }
 
             freezeMapFile = sourceFile
-            cssFreezer = sourceFile.freezerInstance
+            freezerInstance = sourceFile.freezerInstance
 
             var freezeMap = sourceFile.contents ? JSON.parse(sourceFile.contents.toString('utf-8')) : null
 
             var destinationBaseDir = path.dirname(sourceFile.path)
 
-            var resolvedFreezeMap = cssFreezer.resolveFreezeMap(freezeMap, destinationBaseDir, true)
+            var resolvedFreezeMap = freezerInstance.resolveFreezeMap(freezeMap, destinationBaseDir, true)
 
             sourceFile.contents = toJSONBuffer(resolvedFreezeMap)
 

@@ -115,6 +115,9 @@ ResourceFreezer.prototype.resolveFreezeMap = function (freezeMap, destinationBas
             if (util.isNullOrUndefined(noResolveSourcePath)) {
                 sourcePath = path.relative(freezeMapBaseDir, sourcePath)
             }
+            else {
+                sourcePath = sourcePath.replace(separatorRegexp, '/')
+            }
 
             if (!util.isNullOrUndefined(destinationBaseDir)) {
                 frozenPath = path.relative(freezeMapBaseDir, path.join(destinationBaseDir, frozenPath))

@@ -40,7 +40,7 @@ ResourceFreezer.prototype.stream = function (pipeMainTransform) {
         this.queue(null)
     })
 
-    stream.pipe(this.createStream(this.pipeFreezedFilesCollectorTransform))
+    stream.pipe(this.createStream(this.pipeFrozenFilesCollectorTransform))
 
     stream.pipe(
         this.createStream(function endCallback(stream, sourceFile) {
@@ -92,7 +92,7 @@ ResourceFreezer.prototype.freezeLinks = function freezeLinks(freezingFile, strea
     return filePath + urlData.query
 }
 
-ResourceFreezer.prototype.pipeFreezedFilesCollectorTransform = function pipeFreezedFilesCollectorTransform(stream, sourceFile) {
+ResourceFreezer.prototype.pipeFrozenFilesCollectorTransform = function pipeFrozenFilesCollectorTransform(stream, sourceFile) {
     if (sourceFile.sourcePath) {
         this.freezeMap[sourceFile.sourcePath] = sourceFile.path
     }
@@ -106,29 +106,29 @@ ResourceFreezer.prototype.resolveFreezeMap = function (freezeMap, destinationBas
     var freezeMapBaseDir = this.config.freezeMapBaseDir,
         relativeFreezeMap = Object.create(null)
 
-    var separatorRegexp = new RegExp(path.sep, 'g')
+    var separatorRegexp = new RegExp(path.sep.replace(/\\/, '\\\\'), 'g')
 
     if (freezeMap) {
         Object.keys(freezeMap).forEach(function (sourcePath) {
-            var freezedPath = freezeMap[sourcePath]
+            var frozenPath = freezeMap[sourcePath]
 
             if (util.isNullOrUndefined(noResolveSourcePath)) {
                 sourcePath = path.relative(freezeMapBaseDir, sourcePath)
             }
 
             if (!util.isNullOrUndefined(destinationBaseDir)) {
-                freezedPath = path.relative(freezeMapBaseDir, path.join(destinationBaseDir, freezedPath))
+                frozenPath = path.relative(freezeMapBaseDir, path.join(destinationBaseDir, frozenPath))
             }
 
             // replace any OS path separator with slash(/)
-            relativeFreezeMap[sourcePath] = freezedPath.replace(separatorRegexp, '/')
+            relativeFreezeMap[sourcePath] = frozenPath.replace(separatorRegexp, '/')
         }.bind(this))
     }
 
     return relativeFreezeMap
 }
 
-ResourceFreezer.prototype.resolveFreezedLinks = function resolveFreezedLinks(cssFilePath, url) {
+ResourceFreezer.prototype.resolveFrozenLinks = function resolveFrozenLinks(cssFilePath, url) {
     if (!this.config.freezeNestingLevel) {
         return url
     }

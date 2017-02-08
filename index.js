@@ -74,6 +74,13 @@ ResourceFreezer.prototype.freezeLinks = function freezeLinks(freezingFile, strea
 
     var fileSourcePath = path.resolve(freezingFile.base, urlData.path)
 
+    try {
+        fs.statSync(fileSourcePath)
+    }
+    catch (e) {
+        return url
+    }
+    
     var file = new Vinyl({
         base: '',
         cwd: '',

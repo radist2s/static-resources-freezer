@@ -13,7 +13,7 @@ function toJSONBuffer(obj) {
 function ResourceFreezer(options) {
     this.config = Object.create(this.constructor.prototype.config)
 
-    util._extend(this.config, options)
+    Object.assign(this.config, options)
 
     this.freezeMap = Object.create(null)
 

@@ -19,7 +19,7 @@ function ResourceFreezer(options) {
 
     this.freezeMapFile = new Vinyl({
         path: this.config.freezeMapFileName,
-        base: '',
+        base: '.',
         cwd: ''
     })
 

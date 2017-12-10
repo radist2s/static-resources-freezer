@@ -1,6 +1,6 @@
 {
   "name": "static-resources-freezer",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Static resources freezer. The best use for cache invalidation.",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "crypto": "^0.0.3",
     "external-protocol-tester": "^0.0.1",
     "through": "^2.3",
-    "vinyl": "^1.1.0"
+    "vinyl": "^2.1.0"
   },
   "author": "Alex Batalov",
   "license": "MIT",

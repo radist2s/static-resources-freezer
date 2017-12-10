@@ -82,7 +82,7 @@ ResourceFreezer.prototype.freezeLinks = function freezeLinks(freezingFile, strea
     }
     
     var file = new Vinyl({
-        base: '',
+        base: '.',
         cwd: '',
         path: fileSourcePath,
         contents: fs.readFileSync(fileSourcePath)

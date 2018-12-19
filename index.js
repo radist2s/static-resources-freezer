@@ -65,7 +65,18 @@ ResourceFreezer.prototype.createStream = function (transformCallback, endCallbac
     }, endCallback)
 }
 
-ResourceFreezer.prototype.freezeLinks = function freezeLinks(freezingFile, stream, url) {
+ResourceFreezer.prototype.freezeLinks = function freezeLinks(freezingFile, stream, _callback, _url) {
+    var callback, url
+
+    if (util.isString(_callback)) {
+        url = _callback
+        callback = undefined
+    }
+    else {
+        url = _url
+        callback = _callback
+    }
+
     if (protocolTester.isExternalUrl(url)) {
         return url
     }
@@ -93,6 +104,10 @@ ResourceFreezer.prototype.freezeLinks = function freezeLinks(freezingFile, strea
 
     file.path = filePath
     file.sourcePath = fileSourcePath
+
+    if (util.isFunction(callback)) {
+        callback(freezingFile, stream, url, file)
+    }
 
     stream.push(file)
 
